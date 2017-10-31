@@ -1,0 +1,13 @@
+extends layout
+
+block content
+
+	a(href="/list", class="back") Listing
+
+	form(name="add-estimation", method="post", action="/convert")
+		div.input
+			span.label video
+			input(type="text", name="video")
+			span.clear
+		div.actions
+			input(type="submit", value="convert")

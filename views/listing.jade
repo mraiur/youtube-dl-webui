@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	a(href="/", class="back") < New video
+
+	div.list
+		- each file in files
+			if file.completed == true
+				a(href="/download/?file="+file.url, target="_blank", class="item completed")
+					= file.fileName
+					span.size
+						= file.fileSize + 'MB'
+			else
+				div.item.running
+					= file.fileName
