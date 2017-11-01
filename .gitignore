@@ -4,4 +4,5 @@
 users.json
 node_modules/
 npm-debug.log
+public/stylesheets/style.css.map
 users.json

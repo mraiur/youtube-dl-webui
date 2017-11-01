@@ -27,7 +27,8 @@ form .input {
     float: left; }
 
 .list .item {
-  padding: 5px; }
+  padding: 5px;
+  display: block; }
   .list .item.completed {
     color: green; }
     .list .item.completed .size {

@@ -119,6 +119,7 @@ app.post("/convert", function(req, res){
 	}
 });
 
+var videoExtensions = ["mkv", "m4a", "mp4", "ogg", "webm", "flv"];
 app.get("/list", function(req, res){
 	if (req.authenticated)
 	{
@@ -128,7 +129,8 @@ app.get("/list", function(req, res){
 		{
 			var ext = file.split('.').pop();
 			var fileName = file.substr(0, file.length - ext.length -1);
-			if( ext === "mp3" || ext === "webm")
+
+			if( ext === "mp3" || videoExtensions.indexOf(ext) > -1)
 			{
 
 				if (!map[fileName])
@@ -145,7 +147,7 @@ app.get("/list", function(req, res){
 					var stats = fs.statSync(mp3Dir + file);
 					map[fileName].fileSize = (stats.size / 1024 / 1024).toFixed(2);
 				}
-				if (ext === "webm") {
+				if ( videoExtensions.indexOf(ext) > -1 ) {
 					map[fileName].completed = false;
 				}
 			}
