@@ -1,10 +1,6 @@
-extends layout
+extends frame
 
 block content
-	a(href="/", class="back") < New video
-
-	a(href="/list", class="back") update
-
 	div.list
 		- each file in files
 			if file.completed == true

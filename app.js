@@ -70,7 +70,7 @@ app.get('/', function(req, res) {
 	}
 });
 
-app.post("/convert", function(req, res){
+app.post("/", function(req, res){
 	if (req.authenticated)
 	{
 		var errLogFile = __dirname+"/public/mp3/err";
@@ -115,7 +115,7 @@ app.post("/convert", function(req, res){
 		{
 			console.log("error", arguments);
 		});
-		res.redirect("/list");
+		res.render('form');
 	}
 });
 

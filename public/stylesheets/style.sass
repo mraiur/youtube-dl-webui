@@ -1,40 +1,36 @@
 body
   padding: 5px
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  height: 100%
+  overflow: hidden
+
+html
+  height: 100%
 
 a
   color: #00B7FF
 
-.back
-    display: block
-    padding-bottom: 20px
-    text-decoration: none
+#listing
+  width: 100%
+  height: 80%
+
 
 form
+  height: 10%
   .input
       padding-bottom: 20px
       .label
-        width: 20%
+        width: 50px
         display: block
         float: left
-      input
-        width: 80%
+      .link
+        width: 50%
         float: left
-
+      .convert
+        width: 20%
+        float: left
+        input
+          margin-left: 15px
       .clear
           display: block
           clear: both
-      .actions
-          width: 300px
-          float: left
-
-.list
-    .item
-        padding: 5px
-        display: block
-        &.completed
-            color: green
-            .size
-                padding-left: 10px
-        &.running
-            color: red

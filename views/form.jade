@@ -1,13 +1,11 @@
 extends layout
 
 block content
-
-	a(href="/list", class="back") Listing
-
-	form(name="add-estimation", method="post", action="/convert")
+	form(name="add-estimation", method="post", action="/")
 		div.input
-			span.label video
-			input(type="text", name="video")
+			div.label video
+			input(type="text", name="video", class="link")
+			div.convert
+				input(type="submit", value="convert")
 			span.clear
-		div.actions
-			input(type="submit", value="convert")
+
