@@ -1,11 +1,5 @@
 window.onload = function(){
-	timedUpdate();
-}
-
-function timedUpdate()
-{
-	updateListing();
-	setTimeout(timedUpdate, 8000)
+	
 }
 
 function updateListing()
