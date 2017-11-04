@@ -46,8 +46,6 @@ app.use(login);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -70,50 +68,65 @@ app.get('/', function(req, res) {
 	}
 });
 
-app.post("/", function(req, res){
+var shellCommand = function(options, callback)
+{
+	if( fs.existsSync( options.errLogFile ) )
+	{
+		fs.unlinkSync( options.errLogFile);
+	}
+
+	if( fs.existsSync( options.outLogFile ) )
+	{
+		fs.unlinkSync( options.outLogFile);
+	}
+
+	var cmd = spawn(
+		options.cmd,
+		options.params,
+		{
+			cwd: options.cwd
+		}
+	);
+;
+	cmd.stdout.pipe( fs.createWriteStream(options.outLogFile, { flags: 'a' }) );
+	cmd.stderr.pipe( fs.createWriteStream(options.errLogFile, { flags: 'a' }));
+
+	cmd.stderr.on('message', function (data)
+	{
+		console.log("message", data);
+	});
+
+	cmd.on('error', function (code)
+	{
+		console.log("error", arguments);
+	});
+
+	cmd.on('exit', function (code)
+	{
+		console.log("exit", code);
+		if(callback)
+		{
+			callback();
+		}
+	});
+};
+
+app.post("/", function(req, res)
+{
 	if (req.authenticated)
 	{
-		var errLogFile = __dirname+"/public/mp3/err";
-		var outLogFile = __dirname+"/public/mp3/out";
-		if( fs.existsSync( errLogFile ) )
-		{
-			fs.unlinkSync(errLogFile);
-		}
-
-		if( fs.existsSync( outLogFile ) )
-		{
-			fs.unlinkSync(outLogFile);
-		}
-
 		var video = req.body.video;
-		var cmd = spawn(
-			"youtube-dl",
-			[
+		shellCommand({
+			errLogFile : __dirname+"/logs/convert_err",
+			outLogFile : __dirname+"/logs/convert_out",
+			cmd: "youtube-dl",
+			cwd: mp3Dir,
+			params: [
 				'--extract-audio',
 				'--audio-format',
 				'mp3',
 				video
-			],
-			{
-				cwd: mp3Dir
-			}
-		);
-		cmd.stdout.pipe( fs.createWriteStream(outLogFile, { flags: 'a' }) );
-		cmd.stderr.pipe( fs.createWriteStream(errLogFile, { flags: 'a' }));
-
-		cmd.stderr.on('message', function (data)
-		{
-			console.log("message", data);
-		});
-
-		cmd.on('exit', function (code)
-		{
-			console.log("exit", code);
-		});
-
-		cmd.on('error', function (code)
-		{
-			console.log("error", arguments);
+			]
 		});
 		res.render('form');
 	}
@@ -132,7 +145,6 @@ app.get("/list", function(req, res){
 
 			if( ext === "mp3" || videoExtensions.indexOf(ext) > -1)
 			{
-
 				if (!map[fileName])
 				{
 					map[fileName] = {
@@ -157,13 +169,28 @@ app.get("/list", function(req, res){
 	}
 });
 
-
-app.get("/download", function(req, res){
+app.post("/download", function(req, res){
 	if (req.authenticated)
 	{
 		var file = unescape(req.query.file);
 
 		res.download(mp3Dir + file);
+	}
+});
+
+app.post('/clearDownloads', function (req, res) {
+	if (req.authenticated)
+	{
+		var list = fs.readdirSync(mp3Dir);
+
+		list.map( function(file)
+		{
+			if( file !== ".gitignore" )
+			{
+				fs.unlinkSync(mp3Dir + file);
+			}
+		});
+		res.send("true");
 	}
 });
 
