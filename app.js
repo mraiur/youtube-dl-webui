@@ -169,11 +169,19 @@ app.get("/list", function(req, res){
 	}
 });
 
+app.get("/download", function(req, res){
+	if (req.authenticated)
+	{
+		var file = unescape(req.query.file);
+		console.log(mp3Dir+file);
+		res.download(mp3Dir + file);
+	}
+});
+
 app.post("/download", function(req, res){
 	if (req.authenticated)
 	{
 		var file = unescape(req.query.file);
-
 		res.download(mp3Dir + file);
 	}
 });
