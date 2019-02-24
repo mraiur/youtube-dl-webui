@@ -132,6 +132,27 @@ app.post("/", function(req, res)
 	}
 });
 
+app.post("/video", function(req, res)
+{
+	if (req.authenticated)
+	{
+		var video = req.body.video;
+		shellCommand({
+			errLogFile : __dirname+"/logs/convert_err",
+			outLogFile : __dirname+"/logs/convert_out",
+			cmd: "youtube-dl",
+			cwd: mp3Dir,
+			params: [
+				//'--extract-audio',
+				//'--audio-format',
+				//'mp3',
+				video
+			]
+		});
+		res.render('form');
+	}
+});
+
 var videoExtensions = ["mkv", "m4a", "mp4", "ogg", "webm", "flv"];
 app.get("/list", function(req, res){
 	if (req.authenticated)

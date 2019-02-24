@@ -1,7 +1,21 @@
 extends layout
 
 block content
+	div youtube-to-mp3
 	form(name="add-estimation", method="post", action="/")
+		div.input
+			div.label video
+			input(type="text", name="video", class="link")
+			div.convert
+				input(type="submit", value="convert")
+			span.clear
+
+	input(type="button", class="updateListing", onclick="updateListing()", value="update listing")
+	input(type="button", class="clearDownloads" onclick="clearDownloads()", value="clear downloads")
+	div.clear
+
+	div youtube-to-video
+	form(name="add-estimation", method="post", action="/video")
 		div.input
 			div.label video
 			input(type="text", name="video", class="link")
